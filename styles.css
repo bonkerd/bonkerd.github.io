@@ -8,11 +8,24 @@
     --text-secondary: #b9bbbe;
 }
 
+:root[data-theme="light"] {
+    --primary: #ff006e;
+    --secondary: #8338ec;
+    --text: #2d2d2d;
+    --background: #f0f0f0;
+    --surface: #dadada;
+    --hover: rgba(0, 0, 0, 0.05);
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     transition: all 0.3s ease;
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -28,10 +41,11 @@ body {
 /* Header Styles */
 header {
     background-color: var(--surface);
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
     position: fixed;
-    width: 100%;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
@@ -43,7 +57,7 @@ nav {
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    height: 60px;
+    height: 40px;
 }
 
 .logo-container {
@@ -54,13 +68,13 @@ nav {
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
     background: linear-gradient(45deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 60px;
+    line-height: 40px;
     display: inline-block;
 }
 
@@ -68,7 +82,7 @@ nav {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    height: 60px;
+    height: 40px;
     padding: 0 0.25rem;
 }
 
@@ -78,15 +92,15 @@ nav {
     cursor: pointer;
     padding: 0;
     color: transparent;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease;
-    height: 60px;
+    height: 40px;
     width: 24px;
     position: relative;
-    top: 3px;
+    top: 2px;
 }
 
 .music-toggle i {
@@ -125,14 +139,9 @@ nav {
     transition: width 0.3s ease;
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 40px;
     position: relative;
-    top: 3px;
-}
-
-.volume-container.show {
-    width: 100px;
-    padding-left: 0.5rem;
+    top: 2px;
 }
 
 .volume-slider {
@@ -191,18 +200,57 @@ nav {
     text-decoration: none;
     font-weight: 500;
     padding: 0 1rem;
-    border-radius: 4px;
     transition: all 0.3s ease;
+    position: relative;
+    top: 2px;
+    font-size: 1rem;
 }
 
 .nav-links a:hover {
-    background-color: rgba(114, 137, 218, 0.1);
-    color: var(--primary);
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: transparent;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    height: 40px;
+    width: 24px;
+    position: relative;
+    top: 2px;
+}
+
+.theme-toggle i {
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+.theme-toggle:hover i {
+    transform: rotate(45deg);
 }
 
 /* Main Content */
 main {
-    padding-top: 80px;
+    padding-top: 60px;
     flex: 1;
 }
 
@@ -378,7 +426,7 @@ footer {
 /* Responsive Design */
 @media (max-width: 768px) {
     header {
-        padding: 1rem;
+        padding: 0.5rem;
     }
     
     .nav-links {

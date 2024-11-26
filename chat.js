@@ -19,7 +19,24 @@ const resetChat = document.getElementById('reset-chat');
 // Model switch handler
 modelSwitch.addEventListener('click', () => {
     currentModel = currentModel === 'gemini' ? 'groq' : 'gemini';
-    modelSwitch.querySelector('span').textContent = `Using ${currentModel.charAt(0).toUpperCase() + currentModel.slice(1)}`;
+    
+    // Create and show notification
+    const notification = document.createElement('div');
+    notification.className = 'model-notification';
+    notification.innerHTML = `
+        <i class="fas fa-exchange-alt"></i>
+        Switched to ${currentModel.charAt(0).toUpperCase() + currentModel.slice(1)} model
+    `;
+    document.body.appendChild(notification);
+    
+    // Trigger animation
+    setTimeout(() => notification.classList.add('show'), 10);
+    
+    // Remove notification after 2 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 2000);
 });
 
 // Reset chat handler

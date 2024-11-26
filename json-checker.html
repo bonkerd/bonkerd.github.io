@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Checker</title>
+    <link rel="stylesheet" href="json-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="json-container">
+        <header class="json-header">
+            <div>
+                <div class="header-left">
+                    <h1><i class="fas fa-code"></i> JSON Checker</h1>
+                    <a href="index.html#projects" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Return to Projects
+                    </a>
+                </div>
+                <div class="header-controls">
+                    <button id="format-btn" class="control-btn" title="Format JSON">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    <button id="minify-btn" class="control-btn" title="Minify JSON">
+                        <i class="fas fa-compress-alt"></i>
+                    </button>
+                    <button id="copy-btn" class="control-btn" title="Copy to Clipboard">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button id="clear-btn" class="control-btn" title="Clear">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="editor-container">
+            <div class="input-section">
+                <div class="section-header">Input JSON</div>
+                <textarea id="json-input" placeholder="Paste your JSON here..."></textarea>
+            </div>
+            <div class="output-section">
+                <div class="section-header">Validation Result</div>
+                <div id="validation-result"></div>
+            </div>
+        </div>
+    </div>
+    <script src="json-checker.js"></script>
+</body>
+</html>

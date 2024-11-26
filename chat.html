@@ -39,16 +39,19 @@
     <div class="chat-container">
         <header class="chat-header">
             <div>
-                <h1><i class="fas fa-robot"></i> AI Chat Interface</h1>
+                <div class="header-left">
+                    <h1><i class="fas fa-robot"></i> AI Chat Interface</h1>
+                    <a href="index.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
                 <div class="header-controls">
-                    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Projects</a>
-                    <button id="model-switch" class="model-switch">
+                    <button id="model-switch" class="control-btn" title="Switch Model">
                         <i class="fas fa-exchange-alt"></i>
-                        <span>Using Gemini</span>
                     </button>
-                    <button id="reset-chat" class="model-switch">
+                    <button id="reset-chat" class="control-btn" title="Reset Chat">
                         <i class="fas fa-trash"></i>
-                        <span>Reset Chat</span>
                     </button>
                 </div>
             </div>
@@ -56,7 +59,7 @@
         
         <div class="chat-messages" id="chat-messages">
             <div class="message ai-message">
-                <div class="message-content">Hello! I'm your AI assistant. How can I help you today? (I now have memory of our conversation!)</div>
+                <div class="message-content">Hello! I'm your AI assistant. How can I help you today? (I now have memory of our conversation! The memory gets reset after refreshing the page)</div>
             </div>
         </div>
 
