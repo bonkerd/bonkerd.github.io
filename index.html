@@ -10,7 +10,17 @@
 <body>
     <header>
         <nav>
-            <div class="logo">Bonker</div>
+            <div class="logo-container">
+                <div class="logo">Bonker</div>
+                <div class="music-controls">
+                    <button id="music-toggle" class="music-toggle">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="volume-container">
+                        <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="100">
+                    </div>
+                </div>
+            </div>
             <div class="nav-links">
                 <a href="#projects">Projects</a>
                 <a href="https://github.com/bink-lab" target="_blank">GitHub</a>

@@ -50,3 +50,68 @@ cards.forEach(card => {
         card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
     });
 });
+
+// Tooltip functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const tooltipContainer = document.querySelector('.tooltip-container');
+    const tooltip = document.querySelector('.tooltip');
+    let timeoutId;
+
+    tooltipContainer.addEventListener('click', (e) => {
+        tooltip.classList.add('show');
+        
+        // Hide tooltip after 2 seconds
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            tooltip.classList.remove('show');
+        }, 2000);
+    });
+
+    // Hide tooltip when clicking anywhere else
+    document.addEventListener('click', (e) => {
+        if (!tooltipContainer.contains(e.target)) {
+            tooltip.classList.remove('show');
+        }
+    });
+});
+
+// Music player functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const musicToggle = document.getElementById('music-toggle');
+    const musicIcon = musicToggle.querySelector('i');
+    const volumeContainer = document.querySelector('.volume-container');
+    const volumeSlider = document.getElementById('volume-slider');
+    const audio = new Audio('song.mp3');
+    
+    // Add ended event listener to reset the button
+    audio.addEventListener('ended', () => {
+        musicToggle.classList.remove('playing');
+        musicIcon.classList.remove('fa-pause');
+        musicIcon.classList.add('fa-play');
+        volumeContainer.classList.remove('show');
+    });
+
+    // Volume slider functionality
+    volumeSlider.addEventListener('input', (e) => {
+        const value = e.target.value;
+        audio.volume = value / 100;
+        // Update the gradient to match the volume level
+        volumeSlider.style.background = `linear-gradient(to right, var(--primary) ${value}%, var(--surface) ${value}%)`;
+    });
+
+    musicToggle.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            musicToggle.classList.add('playing');
+            musicIcon.classList.remove('fa-play');
+            musicIcon.classList.add('fa-pause');
+            volumeContainer.classList.add('show');
+        } else {
+            audio.pause();
+            musicToggle.classList.remove('playing');
+            musicIcon.classList.remove('fa-pause');
+            musicIcon.classList.add('fa-play');
+            volumeContainer.classList.remove('show');
+        }
+    });
+});
