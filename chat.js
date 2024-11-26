@@ -94,6 +94,17 @@ async function sendMessage() {
     // Add user message to chat and history
     addMessageToChat('user', message);
     conversationHistory.push({ role: 'user', parts: [{ text: message }] });
+    
+    // Limit conversation history to last 5 messages
+    if (conversationHistory.length > 10) { // 10 because each exchange has 2 messages (user + AI)
+        conversationHistory = conversationHistory.slice(-10);
+        
+        // Also remove older messages from the chat display
+        while (chatMessages.children.length > 11) { // 11 because of the initial greeting message
+            chatMessages.removeChild(chatMessages.children[1]); // Remove the second element (after greeting)
+        }
+    }
+    
     userInput.value = '';
     userInput.style.height = 'auto';
 
