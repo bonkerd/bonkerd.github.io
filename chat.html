@@ -40,7 +40,17 @@
         <header class="chat-header">
             <div>
                 <h1><i class="fas fa-robot"></i> AI Chat Interface</h1>
-                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+                <div class="header-controls">
+                    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+                    <button id="model-switch" class="model-switch">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Using Gemini</span>
+                    </button>
+                    <button id="reset-chat" class="model-switch">
+                        <i class="fas fa-trash"></i>
+                        <span>Reset Chat</span>
+                    </button>
+                </div>
             </div>
         </header>
         

@@ -1,11 +1,54 @@
-// Store API key securely
+// Store API keys securely
 const GEMINI_API_KEY = 'AIzaSyC1JkdhJdTUgPNfCJqegucnj9EjIb4a1L4'; // Replace with your Gemini API key
-const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+const GROQ_API_KEY = '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'; // Replace with your Groq API key
+
+// API URLs
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+// Current model state
+let currentModel = 'gemini';
 
 // DOM Elements
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
+const modelSwitch = document.getElementById('model-switch');
+const resetChat = document.getElementById('reset-chat');
+
+// Model switch handler
+modelSwitch.addEventListener('click', () => {
+    currentModel = currentModel === 'gemini' ? 'groq' : 'gemini';
+    modelSwitch.querySelector('span').textContent = `Using ${currentModel.charAt(0).toUpperCase() + currentModel.slice(1)}`;
+});
+
+// Reset chat handler
+resetChat.addEventListener('click', () => {
+    // Clear conversation history
+    conversationHistory = [];
+    
+    // Get all messages except the first one (initial greeting)
+    const messages = Array.from(chatMessages.children).slice(1);
+    
+    // Add fade-out animation to each message
+    messages.forEach((message, index) => {
+        // Stagger the animation slightly for each message
+        setTimeout(() => {
+            message.classList.add('fade-out');
+        }, index * 50);
+    });
+    
+    // Remove messages after animation completes
+    setTimeout(() => {
+        while (chatMessages.children.length > 1) {
+            chatMessages.removeChild(chatMessages.lastChild);
+        }
+    }, (messages.length * 50) + 300); // Wait for all animations to complete
+    
+    // Clear input
+    userInput.value = '';
+    userInput.style.height = 'auto';
+});
 
 // Conversation history
 let conversationHistory = [];
@@ -41,26 +84,48 @@ async function sendMessage() {
         // Show loading indicator
         const loadingMessage = addMessageToChat('ai', 'Thinking...');
         
-        // Send request to Gemini API with conversation history
-        const response = await fetch(`${API_URL}?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                contents: conversationHistory
-            })
-        });
+        let response;
+        let aiResponse;
 
-        if (!response.ok) {
-            throw new Error('API request failed');
+        if (currentModel === 'gemini') {
+            // Send request to Gemini API
+            response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: conversationHistory
+                })
+            });
+
+            const data = await response.json();
+            aiResponse = data.candidates[0].content.parts[0].text;
+        } else {
+            // Send request to Groq API
+            response = await fetch(GROQ_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${GROQ_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'mixtral-8x7b-32768',
+                    messages: conversationHistory.map(msg => ({
+                        role: msg.role === 'user' ? 'user' : 'assistant',
+                        content: msg.parts[0].text
+                    })),
+                    temperature: 0.7,
+                    max_tokens: 32768
+                })
+            });
+
+            const data = await response.json();
+            aiResponse = data.choices[0].message.content;
         }
 
-        const data = await response.json();
-        const aiResponse = data.candidates[0].content.parts[0].text;
-
         // Update the loading message with the AI's response
-        loadingMessage.textContent = aiResponse;
+        loadingMessage.innerHTML = marked.parse(aiResponse);
         
         // Add AI response to conversation history
         conversationHistory.push({ role: 'model', parts: [{ text: aiResponse }] });

@@ -56,17 +56,47 @@ body {
     gap: 0.5rem;
 }
 
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.model-switch {
+    background-color: var(--surface-light);
+    border: none;
+    color: var(--text);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.model-switch:hover {
+    background-color: var(--primary);
+}
+
+.model-switch i {
+    font-size: 0.8rem;
+}
+
 .back-btn {
-    color: var(--text-secondary);
+    color: var(--text);
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    color: var(--text);
+    background-color: var(--surface-light);
 }
 
 .chat-messages {
@@ -171,6 +201,21 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+.message.fade-out {
+    animation: fadeOut 0.3s ease forwards;
 }
 
 /* Scrollbar Styling */
