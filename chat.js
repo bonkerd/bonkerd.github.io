@@ -1,11 +1,14 @@
 // Store API key securely
-const GROQ_API_KEY = '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'; // Replace with your actual API key
-const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GEMINI_API_KEY = 'AIzaSyC1JkdhJdTUgPNfCJqegucnj9EjIb4a1L4'; // Replace with your Gemini API key
+const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // DOM Elements
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendButton = document.getElementById('send-button');
+
+// Conversation history
+let conversationHistory = [];
 
 // Auto-resize textarea
 userInput.addEventListener('input', function() {
@@ -28,8 +31,9 @@ async function sendMessage() {
     const message = userInput.value.trim();
     if (!message) return;
 
-    // Add user message to chat
+    // Add user message to chat and history
     addMessageToChat('user', message);
+    conversationHistory.push({ role: 'user', parts: [{ text: message }] });
     userInput.value = '';
     userInput.style.height = 'auto';
 
@@ -37,21 +41,14 @@ async function sendMessage() {
         // Show loading indicator
         const loadingMessage = addMessageToChat('ai', 'Thinking...');
         
-        // Send request to Groq API
-        const response = await fetch(API_URL, {
+        // Send request to Gemini API with conversation history
+        const response = await fetch(`${API_URL}?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${GROQ_API_KEY}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: 'mixtral-8x7b-32768',
-                messages: [{
-                    role: 'user',
-                    content: message
-                }],
-                temperature: 0.7,
-                max_tokens: 32768
+                contents: conversationHistory
             })
         });
 
@@ -60,11 +57,13 @@ async function sendMessage() {
         }
 
         const data = await response.json();
-        const aiResponse = data.choices[0].message.content;
+        const aiResponse = data.candidates[0].content.parts[0].text;
 
-        // Remove loading message and add AI response
-        loadingMessage.remove();
-        addMessageToChat('ai', aiResponse);
+        // Update the loading message with the AI's response
+        loadingMessage.textContent = aiResponse;
+        
+        // Add AI response to conversation history
+        conversationHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
 
     } catch (error) {
         console.error('Error:', error);
@@ -75,18 +74,21 @@ async function sendMessage() {
 function addMessageToChat(role, content) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${role}-message`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
     
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.textContent = content;
-    
-    messageDiv.appendChild(messageContent);
+    // Use marked to render markdown for AI messages, plain text for user
+    if (role === 'ai') {
+        contentDiv.innerHTML = marked.parse(content);
+    } else {
+        contentDiv.textContent = content;
+    }
+
+    messageDiv.appendChild(contentDiv);
     chatMessages.appendChild(messageDiv);
-    
-    // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    return messageDiv;
+    return contentDiv;
 }
 
 // Add loading animation
