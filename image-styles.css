@@ -62,17 +62,16 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: var(--text);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 5px;
-    background-color: var(--surface);
-    transition: background-color 0.3s ease;
+    transition: color 0.2s ease;
 }
 
 .back-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text);
 }
 
 .control-btn {
@@ -81,11 +80,13 @@ body {
     color: var(--text-secondary);
     cursor: pointer;
     padding: 0.5rem;
-    font-size: 1.1rem;
-    transition: all 0.2s;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 .control-btn:hover {
@@ -93,7 +94,7 @@ body {
 }
 
 .control-btn i {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 .main-content {

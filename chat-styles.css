@@ -86,19 +86,38 @@ body {
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 1.1rem;
     padding: 0.5rem;
-    transition: all 0.3s ease;
-    border-radius: 4px;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.control-btn i {
+    font-size: 1.2rem;
 }
 
 .control-btn:hover {
     color: var(--text);
-    background-color: var(--surface-light);
 }
 
-.control-btn i {
-    font-size: 1.1rem;
+.control-btn:hover .fa-exchange-alt {
+    color: #4CAF50; /* Green for model switch */
+}
+
+.control-btn:hover .fa-trash {
+    color: #ff4444; /* Red for trash/clear */
+}
+
+.control-btn:hover .fa-arrow-left {
+    color: #2196F3; /* Blue for back button */
+}
+
+.control-btn:hover .fa-robot {
+    color: #9C27B0; /* Purple for robot icon */
 }
 
 .chat-messages {

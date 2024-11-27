@@ -69,15 +69,47 @@ body {
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 1.1rem;
     padding: 0.5rem;
-    transition: all 0.3s ease;
-    border-radius: 4px;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    min-height: 40px;
 }
 
 .control-btn:hover {
     color: var(--text);
-    background-color: var(--surface-light);
+}
+
+.control-btn:hover .fa-align-left {
+    color: #2196F3; /* Blue for format */
+}
+
+.control-btn:hover .fa-compress-alt {
+    color: #FF9800; /* Orange for minify */
+}
+
+.control-btn:hover .fa-copy {
+    color: #4CAF50; /* Green for copy */
+}
+
+.control-btn:hover .fa-trash {
+    color: #ff4444; /* Red for trash/clear */
+}
+
+.control-btn:hover .fa-arrow-left {
+    color: #00BCD4; /* Cyan for back button */
+}
+
+.control-btn:hover .fa-code {
+    color: #9C27B0; /* Purple for code icon */
+}
+
+.control-btn i {
+    font-size: 1.2rem;
+    transition: color 0.2s ease-in-out;
 }
 
 .back-btn {
