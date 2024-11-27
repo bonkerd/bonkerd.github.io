@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor</title>
+    <link rel="stylesheet" href="image-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="compressor-container">
+        <header class="compressor-header">
+            <div>
+                <div class="header-left">
+                    <h1><i class="fas fa-image"></i> Image Compressor</h1>
+                    <a href="index.html" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
+                <div class="header-controls">
+                    <button id="clear-btn" class="control-btn" title="Clear">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="drop-zone" id="drop-zone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Drag & Drop your images here or</p>
+                <button class="upload-btn">Choose Files</button>
+                <input type="file" id="file-input" accept="image/*" multiple hidden>
+            </div>
+
+            <div class="preview-section">
+                <h2>Uploaded Images</h2>
+                <div class="preview-grid" id="preview-grid"></div>
+            </div>
+
+            <div class="settings-panel">
+                <div class="mode-select">
+                    <div class="toggle-group">
+                        <button class="toggle-btn active" data-mode="quality">
+                            <i class="fas fa-sliders-h"></i>
+                            Quality
+                        </button>
+                        <button class="toggle-btn" data-mode="size">
+                            <i class="fas fa-compress"></i>
+                            Target Size
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="quality-settings" class="mode-settings">
+                    <div class="setting">
+                        <label for="quality-slider">Quality:</label>
+                        <input type="range" id="quality-slider" min="0" max="100" value="80">
+                        <span id="quality-value">80%</span>
+                    </div>
+                </div>
+
+                <div id="size-settings" class="mode-settings" style="display: none;">
+                    <div class="setting">
+                        <label for="target-size">Target Size:</label>
+                        <input type="number" id="target-size" value="1" min="0.1" step="0.1">
+                        <select id="size-unit">
+                            <option value="MB">MB</option>
+                            <option value="KB">KB</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting">
+                    <label for="max-width">Max Width:</label>
+                    <input type="number" id="max-width" value="1920" min="100" step="100">
+                    <span>px</span>
+                </div>
+                <div class="setting">
+                    <label for="format">Output Format:</label>
+                    <select id="format">
+                        <option value="jpeg">JPEG</option>
+                        <option value="png">PNG</option>
+                        <option value="webp">WebP</option>
+                    </select>
+                </div>
+                <button id="compress-btn" class="compress-btn">
+                    <i class="fas fa-compress-alt"></i> Compress Images
+                </button>
+            </div>
+
+            <div class="images-grid" id="images-grid"></div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.1/browser-image-compression.min.js"></script>
+    <script src="image-compressor.js"></script>
+</body>
+</html>
