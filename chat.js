@@ -16,16 +16,22 @@ const sendButton = document.getElementById('send-button');
 const modelSwitch = document.getElementById('model-switch');
 const resetChat = document.getElementById('reset-chat');
 
+// Add event listener for all links in chat messages
+chatMessages.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+        e.preventDefault();
+        window.open(e.target.href, '_blank', 'noopener,noreferrer');
+    }
+});
+
 // Add initial message about model switching
 const modelSwitchMessage = document.createElement('div');
 modelSwitchMessage.className = 'message ai-message';
 modelSwitchMessage.innerHTML = `
-    <div class="message-content">
-        You can switch between Gemini and Groq models using the switch button in the top right. 
-        Each model has different capabilities and memory limits:
-        • Gemini: Up to 20 messages (10 user + 10 AI)
-        • Groq / Mistral: Up to 10 messages (5 user + 5 AI)
-    </div>
+    <div class="message-content">You can switch between Gemini and Groq models using the switch button in the top right. 
+Each model has different capabilities and memory limits:
+• Gemini: Up to 20 messages (10 user + 10 AI)
+• Groq / Mistral: Up to 10 messages (5 user + 5 AI)</div>
 `;
 chatMessages.appendChild(modelSwitchMessage);
 
@@ -199,21 +205,26 @@ function addMessageToChat(role, content) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${role}-message`;
     
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = marked.parse(content);
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
     
-    // Make all links open in new tabs
-    const links = messageContent.getElementsByTagName('a');
-    for (let link of links) {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer'); // Security best practice
+    // Use marked to render markdown for AI messages, plain text for user
+    if (role === 'user') {
+        contentDiv.textContent = content;
+    } else {
+        contentDiv.innerHTML = marked.parse(content);
+        // Make all links open in new tabs for AI/model messages
+        const links = contentDiv.getElementsByTagName('a');
+        for (let link of links) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        }
     }
     
-    messageDiv.appendChild(messageContent);
+    messageDiv.appendChild(contentDiv);
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-    return messageContent;
+    return contentDiv;
 }
 
 // Add loading animation
