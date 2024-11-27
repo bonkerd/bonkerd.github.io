@@ -198,21 +198,22 @@ async function sendMessage() {
 function addMessageToChat(role, content) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${role}-message`;
-
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
     
-    // Use marked to render markdown for AI messages, plain text for user
-    if (role === 'ai') {
-        contentDiv.innerHTML = marked.parse(content);
-    } else {
-        contentDiv.textContent = content;
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.innerHTML = marked.parse(content);
+    
+    // Make all links open in new tabs
+    const links = messageContent.getElementsByTagName('a');
+    for (let link of links) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer'); // Security best practice
     }
-
-    messageDiv.appendChild(contentDiv);
+    
+    messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-    return contentDiv;
+    return messageContent;
 }
 
 // Add loading animation

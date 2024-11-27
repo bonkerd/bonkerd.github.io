@@ -125,6 +125,21 @@ body {
     animation: messageAppear 0.3s ease;
 }
 
+.message-content a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #7fdbff;  /* Light blue color */
+    transition: color 0.2s ease;
+}
+
+.message-content a:hover {
+    color: #39c5ff;  /* Slightly darker on hover */
+}
+
+.message-content a:visited {
+    color: #7fdbff;  /* Keep same color even after visited */
+}
+
 .user-message {
     justify-content: flex-end;
 }
