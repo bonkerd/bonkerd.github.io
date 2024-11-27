@@ -157,18 +157,76 @@ body {
     color: var(--success);
 }
 
-@media (max-width: 768px) {
-    .editor-container {
-        flex-direction: column;
-        padding: 1rem;
-        height: calc(100vh - 4rem);
-    }
-
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
     .json-header {
-        padding: 1rem;
+        padding: 0.5rem;
     }
 
     .json-header h1 {
         font-size: 1.2rem;
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .back-btn {
+        font-size: 0.9rem;
+    }
+
+    .editor-container {
+        flex-direction: column;
+        height: calc(100vh - 120px);
+    }
+
+    .input-section,
+    .output-section {
+        width: 100%;
+        height: 50%;
+    }
+
+    .control-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .section-header {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+
+    #json-input,
+    #validation-result {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .json-header h1 {
+        font-size: 1rem;
+    }
+
+    .back-btn {
+        font-size: 0.8rem;
+    }
+
+    .header-controls {
+        gap: 0.25rem;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    #json-input,
+    #validation-result {
+        font-size: 0.8rem;
     }
 }

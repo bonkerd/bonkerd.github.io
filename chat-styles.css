@@ -175,6 +175,11 @@ body {
     box-shadow: 0 0 0 2px var(--primary);
 }
 
+#user-input:disabled {
+    cursor: not-allowed;
+    background-color: var(--surface);
+}
+
 #send-button {
     background-color: var(--primary);
     color: white;
@@ -192,6 +197,15 @@ body {
 #send-button:hover {
     background-color: var(--secondary);
     transform: scale(1.05);
+}
+
+#send-button:disabled {
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+#send-button:disabled i {
+    opacity: 0.5;
 }
 
 .model-notification {
@@ -267,6 +281,80 @@ body {
 
 .model-switch {
     display: none;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+    .chat-header {
+        padding: 0.5rem;
+    }
+
+    .chat-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .back-btn {
+        font-size: 0.9rem;
+    }
+
+    .chat-input-wrapper {
+        padding: 0.5rem;
+    }
+
+    #user-input {
+        font-size: 0.9rem;
+        padding: 0.5rem;
+        min-height: 40px;
+    }
+
+    #send-button {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .message {
+        padding: 0.75rem;
+        margin: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .control-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+
+    .model-notification {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .chat-header h1 {
+        font-size: 1rem;
+    }
+
+    .back-btn {
+        font-size: 0.8rem;
+    }
+
+    #user-input {
+        font-size: 0.8rem;
+    }
+
+    .message {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+        margin: 0.5rem 0.25rem;
+    }
 }
 
 @media (max-width: 768px) {

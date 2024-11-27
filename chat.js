@@ -16,6 +16,19 @@ const sendButton = document.getElementById('send-button');
 const modelSwitch = document.getElementById('model-switch');
 const resetChat = document.getElementById('reset-chat');
 
+// Add initial message about model switching
+const modelSwitchMessage = document.createElement('div');
+modelSwitchMessage.className = 'message ai-message';
+modelSwitchMessage.innerHTML = `
+    <div class="message-content">
+        You can switch between Gemini and Groq models using the switch button in the top right. 
+        Each model has different capabilities and memory limits:
+        • Gemini: Up to 20 messages (10 user + 10 AI)
+        • Groq / Mistral: Up to 10 messages (5 user + 5 AI)
+    </div>
+`;
+chatMessages.appendChild(modelSwitchMessage);
+
 // Model switch handler
 modelSwitch.addEventListener('click', () => {
     currentModel = currentModel === 'gemini' ? 'groq' : 'gemini';
@@ -44,8 +57,8 @@ resetChat.addEventListener('click', () => {
     // Clear conversation history
     conversationHistory = [];
     
-    // Get all messages except the first one (initial greeting)
-    const messages = Array.from(chatMessages.children).slice(1);
+    // Get all messages except the first two (initial greeting and model info)
+    const messages = Array.from(chatMessages.children).slice(2);
     
     // Add fade-out animation to each message
     messages.forEach((message, index) => {
@@ -57,7 +70,7 @@ resetChat.addEventListener('click', () => {
     
     // Remove messages after animation completes
     setTimeout(() => {
-        while (chatMessages.children.length > 1) {
+        while (chatMessages.children.length > 2) {
             chatMessages.removeChild(chatMessages.lastChild);
         }
     }, (messages.length * 50) + 300); // Wait for all animations to complete
@@ -91,17 +104,26 @@ async function sendMessage() {
     const message = userInput.value.trim();
     if (!message) return;
 
+    // Disable input and send button while processing
+    userInput.disabled = true;
+    sendButton.disabled = true;
+    userInput.style.opacity = '0.5';
+    sendButton.style.opacity = '0.5';
+
     // Add user message to chat and history
     addMessageToChat('user', message);
     conversationHistory.push({ role: 'user', parts: [{ text: message }] });
     
-    // Limit conversation history to last 5 messages
-    if (conversationHistory.length > 10) { // 10 because each exchange has 2 messages (user + AI)
-        conversationHistory = conversationHistory.slice(-10);
+    // Different limits for each model
+    const messageLimit = currentModel === 'gemini' ? 20 : 10; // 20 for Gemini (10 exchanges), 10 for Groq (5 exchanges)
+    
+    // Limit conversation history based on current model
+    if (conversationHistory.length > messageLimit) {
+        conversationHistory = conversationHistory.slice(-messageLimit);
         
         // Also remove older messages from the chat display
-        while (chatMessages.children.length > 11) { // 11 because of the initial greeting message
-            chatMessages.removeChild(chatMessages.children[1]); // Remove the second element (after greeting)
+        while (chatMessages.children.length > messageLimit + 2) { // +2 for the initial greeting and model info messages
+            chatMessages.removeChild(chatMessages.children[2]); // Remove the third element (after greeting and model info)
         }
     }
     
@@ -160,7 +182,16 @@ async function sendMessage() {
 
     } catch (error) {
         console.error('Error:', error);
-        addMessageToChat('ai', 'Sorry, I encountered an error. Please try again.');
+        // Update the loading message with the error
+        loadingMessage.textContent = 'An error occurred while processing your message. Please try again.';
+    } finally {
+        // Re-enable input and send button after processing
+        userInput.disabled = false;
+        sendButton.disabled = false;
+        userInput.style.opacity = '1';
+        sendButton.style.opacity = '1';
+        // Focus the input field
+        userInput.focus();
     }
 }
 
