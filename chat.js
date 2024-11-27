@@ -34,6 +34,15 @@ Each model has different capabilities and memory limits:
 • Groq / Mistral: Up to 10 messages (5 user + 5 AI)</div>
 `;
 chatMessages.appendChild(modelSwitchMessage);
+scrollToBottom();
+
+// Function to scroll to bottom of chat
+function scrollToBottom() {
+    chatMessages.scrollTo({
+        top: chatMessages.scrollHeight,
+        behavior: 'smooth'
+    });
+}
 
 // Model switch handler
 modelSwitch.addEventListener('click', () => {
@@ -110,7 +119,8 @@ async function sendMessage() {
     const message = userInput.value.trim();
     if (!message) return;
 
-    // Disable input and send button while processing
+    // Clear input and disable controls
+    userInput.value = '';
     userInput.disabled = true;
     sendButton.disabled = true;
     userInput.style.opacity = '0.5';
@@ -118,28 +128,30 @@ async function sendMessage() {
 
     // Add user message to chat and history
     addMessageToChat('user', message);
+    scrollToBottom();
     conversationHistory.push({ role: 'user', parts: [{ text: message }] });
     
-    // Different limits for each model
-    const messageLimit = currentModel === 'gemini' ? 20 : 10; // 20 for Gemini (10 exchanges), 10 for Groq (5 exchanges)
+    // Wait for scroll to complete before proceeding
+    await new Promise(resolve => setTimeout(resolve, 500));
     
-    // Limit conversation history based on current model
+    // Different limits for each model
+    const messageLimit = currentModel === 'gemini' ? 20 : 10;
+    
+    // Trim conversation history if needed
     if (conversationHistory.length > messageLimit) {
         conversationHistory = conversationHistory.slice(-messageLimit);
         
         // Also remove older messages from the chat display
-        while (chatMessages.children.length > messageLimit + 2) { // +2 for the initial greeting and model info messages
-            chatMessages.removeChild(chatMessages.children[2]); // Remove the third element (after greeting and model info)
+        while (chatMessages.children.length > messageLimit + 2) {
+            chatMessages.removeChild(chatMessages.children[2]);
         }
     }
-    
-    userInput.value = '';
-    userInput.style.height = 'auto';
+
+    // Add loading animation
+    const loadingDiv = addLoadingAnimation();
+    scrollToBottom();
 
     try {
-        // Show loading indicator
-        const loadingMessage = addMessageToChat('ai', 'Thinking...');
-        
         let response;
         let aiResponse;
 
@@ -167,12 +179,17 @@ async function sendMessage() {
                 },
                 body: JSON.stringify({
                     model: 'mixtral-8x7b-32768',
-                    messages: conversationHistory.map(msg => ({
-                        role: msg.role === 'user' ? 'user' : 'assistant',
-                        content: msg.parts[0].text
-                    })),
+                    messages: [
+                        {
+                            role: 'user',
+                            content: message
+                        }
+                    ],
                     temperature: 0.7,
-                    max_tokens: 32768
+                    max_tokens: 2048,
+                    top_p: 1,
+                    stream: false,
+                    stop: null
                 })
             });
 
@@ -180,59 +197,81 @@ async function sendMessage() {
             aiResponse = data.choices[0].message.content;
         }
 
-        // Update the loading message with the AI's response
-        loadingMessage.innerHTML = marked.parse(aiResponse);
+        // Remove loading animation
+        loadingDiv.remove();
+        
+        // Add AI response and scroll
+        addMessageToChat('ai', aiResponse);
+        scrollToBottom();
         
         // Add AI response to conversation history
         conversationHistory.push({ role: 'model', parts: [{ text: aiResponse }] });
 
     } catch (error) {
         console.error('Error:', error);
-        // Update the loading message with the error
-        loadingMessage.textContent = 'An error occurred while processing your message. Please try again.';
+        
+        // Remove loading animation
+        loadingDiv.remove();
+        
+        // Add error message and scroll
+        addMessageToChat('ai', 'An error occurred while processing your message. Please try again.');
+        scrollToBottom();
     } finally {
         // Re-enable input and send button after processing
         userInput.disabled = false;
         sendButton.disabled = false;
         userInput.style.opacity = '1';
         sendButton.style.opacity = '1';
-        // Focus the input field
         userInput.focus();
     }
 }
 
 function addMessageToChat(role, content) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${role}-message`;
+    messageDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
     
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
     
-    // Use marked to render markdown for AI messages, plain text for user
-    if (role === 'user') {
-        contentDiv.textContent = content;
-    } else {
-        contentDiv.innerHTML = marked.parse(content);
-        // Make all links open in new tabs for AI/model messages
-        const links = contentDiv.getElementsByTagName('a');
-        for (let link of links) {
-            link.setAttribute('target', '_blank');
-            link.setAttribute('rel', 'noopener noreferrer');
+    // Use marked for AI messages to handle markdown, plain text for user messages
+    if (role === 'ai') {
+        marked.setOptions({
+            breaks: true,
+            mangle: false,
+            headerIds: false,
+            gfm: true
+        });
+        
+        messageContent.innerHTML = marked.parse(content);
+        
+        const links = messageContent.getElementsByTagName('a');
+        for (const link of links) {
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
         }
+    } else {
+        messageContent.textContent = content;
     }
     
-    messageDiv.appendChild(contentDiv);
+    messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    return contentDiv;
 }
 
 // Add loading animation
 function addLoadingAnimation() {
     const loadingDiv = document.createElement('div');
-    loadingDiv.className = 'message ai-message loading';
-    loadingDiv.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+    loadingDiv.className = 'message ai-message';
+    
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'typing-indicator';
+    typingIndicator.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+    `;
+    
+    loadingDiv.appendChild(typingIndicator);
     chatMessages.appendChild(loadingDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
     return loadingDiv;
 }
