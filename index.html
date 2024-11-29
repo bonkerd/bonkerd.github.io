@@ -101,11 +101,32 @@
                         <span>Python</span>
                         <span>Nuitka</span>
                     </div>
-                    <a href="#" class="btn">In development</a>
+                    <a href="javascript:void(0)" class="btn" onclick="openOverlay()">In Development</a>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Overlay -->
+    <div class="overlay" id="infoOverlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h2><i class="fas fa-terminal"></i> Terminal Project</h2>
+                <button class="close-btn" onclick="closeOverlay()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overlay-body">
+                <p>This project is currently in development. Here's what it will do:</p>
+                <ul>
+                    <li>Real terminal commands</li>
+                    <li>Bypass cmd blocks</li>
+                    <li>Include custom command processing</li>
+                </ul>
+                <p>Stay tuned for the release!</p>
+            </div>
+        </div>
+    </div>
 
     <footer>
         <p>Created with ❤️ by bink-lab (Bonker on discord)</p>

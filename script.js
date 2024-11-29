@@ -139,3 +139,32 @@ document.addEventListener('DOMContentLoaded', () => {
         themeIcon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
     }
 });
+
+// Overlay functionality
+function openOverlay() {
+    const overlay = document.getElementById('infoOverlay');
+    const main = document.querySelector('main');
+    overlay.classList.add('active');
+    main.classList.add('blur');
+}
+
+function closeOverlay() {
+    const overlay = document.getElementById('infoOverlay');
+    const main = document.querySelector('main');
+    overlay.classList.remove('active');
+    main.classList.remove('blur');
+}
+
+// Close overlay when clicking outside
+document.getElementById('infoOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeOverlay();
+    }
+});
+
+// Close overlay with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('infoOverlay').classList.contains('active')) {
+        closeOverlay();
+    }
+});
