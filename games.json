@@ -1,0 +1,31 @@
+{
+  "games": [
+    {
+      "title": "Hades",
+      "steam_appid": 1145360,
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2020-09-17T10:00:00Z",
+          "changes": "Initial Release"
+        },
+        {
+          "version": "1.0.1",
+          "date": "2020-09-24T14:30:00Z",
+          "changes": "Bug fixes and performance improvements"
+        }
+      ]
+    },
+    {
+      "title": "Portal 2",
+      "steam_appid": 620,
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2011-04-19T10:00:00Z",
+          "changes": "Initial Release"
+        }
+      ]
+    }
+  ]
+}
