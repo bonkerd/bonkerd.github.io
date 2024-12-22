@@ -52,7 +52,7 @@ modelSwitchMessage.className = 'message ai-message';
 modelSwitchMessage.innerHTML = `
     <div class="message-content">You can switch between Gemini and Groq models using the switch button in the top right. 
 Each model has different capabilities and memory limits:
-• Gemini: Up to 20 messages (10 user + 10 AI)
+• Gemini: Up to 20 messages (10 user + 10 AI) (CURRENTLY BROKEN I WILL FIX IT SOON)
 • Groq / Mistral: Up to 10 messages (5 user + 5 AI)</div>
 `;
 chatMessages.appendChild(modelSwitchMessage);
